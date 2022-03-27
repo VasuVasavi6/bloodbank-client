@@ -2,7 +2,7 @@ import React from "react";
 
 function Navbar() {
   return (
-    <div className="w-full lg:h-40">
+    <div className="w-full lg:15">
       <div className="flex justify-center items-center text-white border-b-2 border-b-white pb-2">
         <ul className="flex justify-between items-center space-x-6">
           <li className="nav-list-item-style">Home</li>

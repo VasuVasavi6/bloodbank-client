@@ -23,4 +23,17 @@
   .nav-list-item-style {
     @apply list-item-border px-8 font-medium  cursor-pointer;
   }
+  .register-input-border {
+    border: 3px solid #a62121;
+  }
+  .sign-in-page-length {
+    height: 70vh;
+  }
+  .sign-in-page-border {
+    border: 2px solid grey;
+    box-shadow: 15px -15px #c9c8c9;
+  }
+  .signinpage-input-bottom {
+    border-bottom: 2px solid #c13037;
+  }
 }
