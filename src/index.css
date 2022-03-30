@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+@import "react-slideshow-image/dist/styles.css";
 
 @layer utilities {
   .app-color {
@@ -26,6 +27,9 @@
   .register-input-border {
     border: 3px solid #a62121;
   }
+  .bloodbank-input-border {
+    border: 3px solid #dfdedf;
+  }
   .sign-in-page-length {
     height: 70vh;
   }
@@ -35,5 +39,52 @@
   }
   .signinpage-input-bottom {
     border-bottom: 2px solid #c13037;
+  }
+  .totals-front > div {
+    background-color: #344158;
+  }
+  .donors-front {
+    border: 20px solid #c13037;
+  }
+
+  /* slide show */
+
+  .each-slide > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    height: 350px;
+  }
+
+  .each-slide span {
+    padding: 20px;
+    font-size: 20px;
+    background: #efefef;
+    text-align: center;
+  }
+
+  /* slide show */
+
+  .testimonial > div {
+    background-color: #344158;
+  }
+  .footer-top {
+    background-color: #c13037;
+  }
+  .footer-top {
+    border-top-right-radius: 50%;
+    border-top-left-radius: 50%;
+  }
+
+  .add-bloodbank {
+    border-bottom: 4px solid #e8d5db;
+    border-left: 5px solid #b5818e;
+  }
+  .all-bloodbanks {
+    border: 3px solid #e8d5db;
+  }
+  .bank-item > div:nth-child(1) {
+    border-right: 2px solid #e8d5db;
   }
 }

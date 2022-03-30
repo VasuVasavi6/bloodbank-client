@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 function Navheader() {
   return (
@@ -11,8 +12,12 @@ function Navheader() {
           <div className="logo-color text-3xl contact-border">
             +91-123456789
           </div>
-          <div className="navheader-btn cursor-pointer">Register</div>
-          <div className="navheader-btn cursor-pointer">Login</div>
+          <Link to="/register">
+            <div className="navheader-btn cursor-pointer">Register</div>
+          </Link>
+          <Link to="/signin">
+            <div className="navheader-btn cursor-pointer">Login</div>
+          </Link>
         </div>
       </div>
     </div>

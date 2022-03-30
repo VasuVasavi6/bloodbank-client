@@ -1,6 +1,59 @@
-import React from "react";
+import axios from "axios";
+import React, { useState } from "react";
+import { ToastContainer } from "react-toastify";
+import { REQUEST_URL } from "../CONSTANTS";
+import { Toast, validateEmail } from "./helper/HelperFunctions";
 
-function SignIn() {
+function SignIn({ setLoggedIn }) {
+  const [inputValues, setInputValues] = useState({
+    name: "",
+    password: "",
+  });
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setInputValues({ ...inputValues, [name]: value });
+  };
+  const validate = () => {
+    if (inputValues.password === "" || inputValues.email === "") {
+      Toast("error", "Some Fields are Empty");
+      return false;
+    } else {
+      if (!validateEmail(inputValues.email)) {
+        Toast("error", "Email is not correct");
+        return false;
+      } else {
+        return true;
+      }
+    }
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (validate()) {
+      axios({
+        method: "POST",
+        url: `${REQUEST_URL}/auth/login`,
+        data: {
+          email: inputValues.email,
+          password: inputValues.password,
+        },
+      }).then((response) => {
+        if (response.data.status === "not ok") {
+          Toast("error", response.data.message);
+        } else {
+          Toast("success", response.data.message);
+          if (response.data.auth === true) {
+            localStorage.setItem("bloodtoken", response.data.token);
+            localStorage.setItem("bloodid", response.data.result._id);
+          }
+          setLoggedIn(true);
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 2000);
+        }
+      });
+    }
+  };
   return (
     <div className=" bg-white sign-in-page-length pt-16">
       <div className="h-96 app-color w-2/3 mx-auto flex rounded-3xl sign-in-page-border">
@@ -17,17 +70,22 @@ function SignIn() {
               placeholder="Email"
               className="signinpage-input-bottom px-3 py-2 mt-3"
               name="email"
+              onChange={handleInputChange}
             />
             <input
-              type="text"
+              type="password"
               placeholder="Password"
               className="signinpage-input-bottom px-3 py-2 mt-3"
               name="password"
+              onChange={handleInputChange}
             />
           </div>
 
           <div className="flex justify-center items-center mt-10">
-            <div className="app-color px-8 py-3 rounded-full text-white font-semibold cursor-pointer">
+            <div
+              className="app-color px-8 py-3 rounded-full text-white font-semibold cursor-pointer"
+              onClick={handleSubmit}
+            >
               LogIn
             </div>
           </div>
@@ -37,6 +95,17 @@ function SignIn() {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="bottom-center"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </div>
   );
 }

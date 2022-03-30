@@ -17,7 +17,6 @@ function Register() {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    console.log(name, value);
     setInputValues({ ...inputValues, [name]: value });
   };
   const validate = () => {
@@ -39,7 +38,6 @@ function Register() {
           Toast("error", "Email is not correct");
           return false;
         } else {
-          Toast("success", "Register Successfully");
           return true;
         }
       }
@@ -49,7 +47,7 @@ function Register() {
     e.preventDefault();
     if (validate()) {
       axios({
-        mehtod: "post",
+        method: "POST",
         url: `${REQUEST_URL}/auth/register`,
         data: {
           fullname: inputValues.fullname,
@@ -62,8 +60,11 @@ function Register() {
       }).then((response) => {
         if (response.data.status === "not ok") {
           Toast("error", response.data.message);
-        } else if (response.data.status === "ok") {
+        } else {
           Toast("success", response.data.message);
+          setTimeout(() => {
+            window.location.href = "/signin";
+          }, 2000);
         }
       });
     }
