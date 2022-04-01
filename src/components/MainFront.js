@@ -29,6 +29,83 @@ const responsive = {
   },
 };
 const label = { inputProps: { "aria-label": "Switch demo" } };
+const cities = [
+  "Ajit Singh Nagar",
+  "Arul Nagar",
+  "Ashok Nagar",
+  "Auto Nagar",
+  "Ayodhya Nagar",
+  "Ayyappa Nagar",
+  "Bandar Road",
+  "Bapanayyanagar",
+  "Bavajipet",
+  "Benz Circle",
+  "Bhagat Singh Nagar",
+  "Bharathi Nagar",
+  "Bhavanipuram",
+  "Bhimannavaripeta",
+  "Bramanadha Reddy Nagar",
+  "Canal Road",
+  "Chalasani Nagar",
+  "Chittinagar",
+  "Chowdhary Pet",
+  "Christurajupuram",
+  "Currency Nagar",
+  "Devi Nagar",
+  "Durga Agraharam",
+  "Enikepadu",
+  "Fakirgudem",
+  "Fraserpeta",
+  "Gayatri Nagar",
+  "Gollapudi",
+  "Governorpet",
+  "Gunadala",
+  "Hanumanpet",
+  "Jojinagar",
+  "Kaleswara Rao Market",
+  "Kanayyathopu",
+  "Kanuru",
+  "Krishnalanka",
+  "Labbipeta",
+  "LEPL Icon",
+  "LIC Colony",
+  "Lurdhunagar",
+  "Mallikarjunapeta",
+  "Milk Colony",
+  "Moghalrajpuram",
+  "Mylavaram Vari Street",
+  "Nehru Nagar",
+  "New Rajarajeswaripeta",
+  "NH-9",
+  "Nidamanuru",
+  "Patamata",
+  "Payakapuram",
+  "PNT Colony",
+  "Poranki",
+  "Ramalingeswara Nagar",
+  "Ramarajunagar",
+  "Ramavarapupadu",
+  "Ranga Nagar",
+  "Ranigaritota",
+  "RR Nagar",
+  "RTC Colony",
+  "Sanath Nagar",
+  "Satyanarayanapuram Main Road",
+  "Satyaranayana Puram",
+  "Siddhartha Nagar",
+  "Sri Ramachandra Nagar",
+  "Sriram Nagar",
+  "State Bank Colony",
+  "Station Road",
+  "Surya Rao Peta",
+  "Tadigadapa Main Raod",
+  "Tarapet",
+  "Tulasi Nagar",
+  "Vambay Colony",
+  "Vidhyadharpuram",
+  "Yanamalakuduru",
+  "Vinchipeta",
+];
 
 const donors = [
   {
@@ -49,7 +126,7 @@ const donors = [
   },
 ];
 
-function MainFront({ setSwitchData }) {
+function MainFront({ setSwitchData, setSearchFilterValue }) {
   const [bankPlasmaSwitch, setBankPlasmaSwitch] = useState("bank");
   const [inputValues, setInputValues] = useState({
     city: "",
@@ -64,36 +141,10 @@ function MainFront({ setSwitchData }) {
     setInputValues({ ...inputValues, [name]: value });
   };
   const handleSearch = () => {
-    if (inputValues.state === "" && inputValues.city === "") {
+    if (inputValues.city === "") {
       Toast("error", "Some Fields are Empty");
     } else {
-      if (bankPlasmaSwitch === "bank") {
-        axios({
-          method: "post",
-          url: `${REQUEST_URL}/userroutesbloodbank//get`,
-          data: {
-            state: inputValues.state,
-            city: inputValues.city,
-          },
-        }).then((response) => {
-          setSwitchData(response.data);
-          console.log(response.data, "blood banks");
-          window.location.href = "/bloodbank";
-        });
-      } else {
-        axios({
-          method: "post",
-          url: `${REQUEST_URL}/userroutesplasmabank/get`,
-          data: {
-            state: inputValues.state,
-            city: inputValues.city,
-          },
-        }).then((response) => {
-          setSwitchData(response.data);
-          console.log(response.data, "plasma banks");
-          window.location.href = "/bloodbank";
-        });
-      }
+      setSearchFilterValue(inputValues.city);
     }
   };
 
@@ -114,30 +165,38 @@ function MainFront({ setSwitchData }) {
                 id="state"
                 className="h-10 rounded-lg text-black px-4 py-2"
                 onChange={handleInputChangeSwitch}
+                value={inputValues.state}
               >
-                <option value="">Select State</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Not Interested">Not Interested</option>
+                <option value="">State is fixed for now</option>
+                <option value="Andhra Pradesh">Andhra Pradesh</option>
               </select>
               <select
                 name="city"
                 id="city"
                 className="h-10 rounded-lg text-black px-4 py-2"
                 onChange={handleInputChangeSwitch}
+                value={inputValues.city}
               >
                 <option value="">Select City</option>
-                <option value="Male">Male</option>
-                <option value="Female">Female</option>
-                <option value="Not Interested">Not Interested</option>
+                {cities.map((val, index) => {
+                  return (
+                    <option value={val} key={index}>
+                      {val}
+                    </option>
+                  );
+                })}
               </select>
             </div>
-            <div
-              className="text-md bg-white logo-color px-8 py-2 rounded-xl cursor-pointer"
-              onClick={handleSearch}
+            <Link
+              to={bankPlasmaSwitch === "bank" ? "/bloodbank" : "/plasmabank"}
             >
-              Find
-            </div>
+              <div
+                className="text-md bg-white logo-color px-8 py-2 rounded-xl cursor-pointer"
+                onClick={handleSearch}
+              >
+                Find
+              </div>
+            </Link>
           </div>
           <div className="mt-20 flex">
             <div className="bg-white ml-36 logo-color py-2 px-4 rounded-lg cursor-pointer">
@@ -174,7 +233,10 @@ function MainFront({ setSwitchData }) {
                 <Carousel responsive={responsive}>
                   {donors.map((val, index) => {
                     return (
-                      <div className="flex flex-col justify-center items-center">
+                      <div
+                        className="flex flex-col justify-center items-center"
+                        key={index}
+                      >
                         <div>icon here</div>
                         <div>{val.fullname}</div>
                         <div>{val.bloodgroup}</div>

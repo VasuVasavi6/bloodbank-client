@@ -14,10 +14,14 @@ import BloodBank from "./components/BloodBank";
 import PlasmaBank from "./components/PlasmaBank";
 import ProfileHeader from "./components/profile/ProfileHeader";
 import CreateProfile from "./components/profile/CreateProfile";
+import ContactUs from "./components/ContactUs";
+import Videos from "./components/Videos";
+import Event from "./components/Event";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [switchData, setSwitchData] = useState([]);
+  const [searchFilterValue, setSearchFilterValue] = useState("");
 
   useEffect(() => {
     axios({
@@ -33,7 +37,7 @@ function App() {
         setLoggedIn(false);
       }
     });
-  }, [loggedIn]);
+  }, [loggedIn, switchData]);
   return (
     <div className="app-color">
       {loggedIn && <LoggedInNav setLoggedIn={setLoggedIn} />}
@@ -44,24 +48,51 @@ function App() {
         <Route
           path="/"
           exact
-          element={<MainFront setSwitchData={setSwitchData} />}
+          element={
+            <MainFront
+              setSwitchData={setSwitchData}
+              setSearchFilterValue={setSearchFilterValue}
+            />
+          }
         />
         <Route path="/register" element={<Register />} />
         <Route path="/signin" element={<SignIn setLoggedIn={setLoggedIn} />} />
         <Route
           path="/bloodbank"
           element={
-            <BloodBank switchData={switchData} setSwitchData={setSwitchData} />
+            <BloodBank
+              switchData={switchData}
+              setSwitchData={setSwitchData}
+              loggedIn={loggedIn}
+              searchFilterValue={searchFilterValue}
+            />
           }
         />
         <Route
           path="/plasmabank"
           element={
-            <PlasmaBank switchData={switchData} setSwitchData={setSwitchData} />
+            <PlasmaBank
+              switchData={switchData}
+              setSwitchData={setSwitchData}
+              loggedIn={loggedIn}
+              searchFilterValue={searchFilterValue}
+            />
           }
         />
         <Route path="/profile" element={<ProfileHeader />} />
         <Route path="/create-profile" element={<CreateProfile />} />
+        <Route path="/contact-us" element={<ContactUs />} />
+        <Route path="/videos" element={<Videos />} />
+        <Route
+          path="/event"
+          element={
+            <Event
+              switchData={switchData}
+              setSwitchData={setSwitchData}
+              loggedIn={loggedIn}
+            />
+          }
+        />
       </Routes>
     </div>
   );

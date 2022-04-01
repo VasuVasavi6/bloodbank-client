@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { REQUEST_URL } from "../CONSTANTS";
 import { Toast, validateEmail } from "./helper/HelperFunctions";
 
@@ -31,10 +31,20 @@ const bloodbankitems = [
     opentime: "dummy",
   },
 ];
-function BloodBank({ switchData, setSwitchData }) {
+function BloodBank({ switchData, setSwitchData, loggedIn, searchFilterValue }) {
   const [addBankCheck, setAddBankCheck] = useState(false);
   const [addBankBtn, setAddBankBtn] = useState(false);
 
+  function filterData(data) {
+    const dummyData = [];
+
+    for (let index = 0; index < data.length; index++) {
+      if (data[index].address.includes(searchFilterValue)) {
+        dummyData.push(data[index]);
+      }
+    }
+    setSwitchData(dummyData);
+  }
   const [inputValues, setInputValues] = useState({
     labname: "",
     address: "",
@@ -52,6 +62,19 @@ function BloodBank({ switchData, setSwitchData }) {
     const { name, value } = e.target;
     setInputValues({ ...inputValues, [name]: value });
   };
+  useEffect(() => {
+    axios({
+      method: "get",
+      url: `${REQUEST_URL}/userroutesbloodbank/get`,
+    }).then((response) => {
+      if (searchFilterValue !== "") {
+        filterData(response.data.result);
+      } else {
+        setSwitchData(response.data.result);
+      }
+    });
+  }, [addBankBtn, searchFilterValue]);
+
   const handleSubmit = (e) => {
     if (
       inputValues.labname === "" ||
@@ -91,10 +114,23 @@ function BloodBank({ switchData, setSwitchData }) {
         }).then((response) => {
           console.log(response.data);
           Toast("success", "BloodBank Added");
-          setAddBankCheck(true);
+          setAddBankBtn(false);
           setTimeout(() => {
             setAddBankCheck(false);
           }, 3000);
+          setInputValues({
+            labname: "",
+            address: "",
+            landmark: "",
+            city: "",
+            pincode: "",
+            email: "",
+            mobilenumber: "",
+            componentsavailable: "",
+            license: "",
+            licenseissuedate: "",
+            opentime: "",
+          });
         });
       }
     }
@@ -114,19 +150,21 @@ function BloodBank({ switchData, setSwitchData }) {
           Bloodbanks
         </div>
         <div className="mt-2 text-md font-semibold text-gray-600">
-          Total number of bloodbank : 100
+          Total number of bloodbank : {switchData.length}
         </div>
-        <div className="flex justify-between items-center px-5 mt-8 add-bloodbank py-3 ">
-          <div className="text-lg text-gray-600">Add new BloodBank</div>
-          <div
-            className="app-color px-8 font-bold py-2 rounded-full text-white cursor-pointer"
-            onClick={(e) => {
-              setAddBankBtn(!addBankBtn);
-            }}
-          >
-            Add
+        {loggedIn && (
+          <div className="flex justify-between items-center px-5 mt-8 add-bloodbank py-3 ">
+            <div className="text-lg text-gray-600">Add new BloodBank</div>
+            <div
+              className="app-color px-8 font-bold py-2 rounded-full text-white cursor-pointer"
+              onClick={(e) => {
+                setAddBankBtn(!addBankBtn);
+              }}
+            >
+              Add
+            </div>
           </div>
-        </div>
+        )}
 
         {addBankBtn && (
           <div className="bloodbank-form">
@@ -144,6 +182,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   name="labname"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.labname}
                 />
               </div>
               <div className="flex flex-col w-1/2">
@@ -151,25 +190,32 @@ function BloodBank({ switchData, setSwitchData }) {
                   Email *
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   name="email"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.email}
                 />
               </div>
             </div>
             <div className="flex mx-auto mt-4 space-x-16">
               <div className="flex flex-col w-full h-28">
                 <label htmlFor="fullname" className="logo-color font-bold">
-                  Adress *
+                  Address *
                 </label>
                 <textarea
                   type="textarea"
                   rows="15"
-                  name="mobilenumber"
+                  cols="30"
+                  name="address"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.address}
                 />
+                <div className="text-red-400 text-sm">
+                  (Enter Address correctly with correct spelling and capitalize
+                  the City Name)
+                </div>
               </div>
             </div>
             <div className="flex mx-auto mt-4 space-x-16">
@@ -182,6 +228,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   name="mobilenumber"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.mobilenumber}
                 />
               </div>
               <div className="flex flex-col w-1/2">
@@ -189,10 +236,11 @@ function BloodBank({ switchData, setSwitchData }) {
                   Landmark *
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   name="landmark"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.landmark}
                 />
               </div>
             </div>
@@ -206,6 +254,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   name="city"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.city}
                 />
               </div>
               <div className="flex flex-col w-1/2">
@@ -213,10 +262,11 @@ function BloodBank({ switchData, setSwitchData }) {
                   Pin Code *
                 </label>
                 <input
-                  type="password"
+                  type="text"
                   name="pincode"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.pincode}
                 />
               </div>
             </div>
@@ -230,6 +280,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   id="opentime"
                   className="bloodbank-input-border px-3 py-1"
                   onChange={handleInputChange}
+                  value={inputValues.opentime}
                 >
                   <option value="">Select</option>
                   <option value="12*7">12*7 Day</option>
@@ -245,6 +296,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   id="componentsavailable"
                   className="bloodbank-input-border px-3 py-1"
                   onChange={handleInputChange}
+                  value={inputValues.componentsavailable}
                 >
                   <option value="">Select</option>
                   <option value="yes">Yes</option>
@@ -262,6 +314,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   name="license"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.license}
                 />
               </div>
               <div className="flex flex-col w-1/2">
@@ -273,6 +326,7 @@ function BloodBank({ switchData, setSwitchData }) {
                   name="licenseissuedate"
                   className="bloodbank-input-border px-3 py-1 w-full"
                   onChange={handleInputChange}
+                  value={inputValues.licenseissuedate}
                 />
               </div>
             </div>
@@ -287,74 +341,78 @@ function BloodBank({ switchData, setSwitchData }) {
           </div>
         )}
 
-        {bloodbankitems.map((val, index) => {
-          return (
-            <div className="py-3 px-2 my-4 all-bloodbanks">
-              <div className="bank-item flex">
-                <div className="font-bold text-4xl w-1/2 flex justify-center items-center logo-color">
-                  BLOOD SPOT
-                </div>
-                <div className="px-8 w-full">
-                  <div className="text-4xl font-semibold w-1/2">
-                    {val.labname}
+        {switchData.length > 0 ? (
+          switchData.map((val, index) => {
+            return (
+              <div className="py-3 px-2 my-4 all-bloodbanks" key={index}>
+                <div className="bank-item flex">
+                  <div className="font-bold text-4xl w-1/2 flex justify-center items-center logo-color">
+                    BLOOD SPOT
                   </div>
-                  <div>
-                    <div>
-                      <span className="font-bold">Address :</span>
-                      {val.address}
+                  <div className="px-8 w-full">
+                    <div className="text-4xl font-semibold w-1/2">
+                      {val.labname}
                     </div>
                     <div>
-                      <span className="font-bold">Landmark :</span>
-                      {val.landmark}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">City :</span>
-                      {val.city}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">Pin-code :</span>
-                      {val.pincode}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">Email :</span>
-                      {val.email}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">Mobile :</span>
-                      {val.mobilenumber}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">
-                        Blood Compone Available :
-                      </span>
-                      {val.componentsavailable}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">License :</span>
-                      {val.license}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">License Obtain Date :</span>
-                      {val.licenseissuedate}
-                    </div>
-                    <div>
-                      {" "}
-                      <span className="font-bold">Open-time :</span>
-                      {val.opentime}
+                      <div>
+                        <span className="font-bold">Address :</span>
+                        {val.address}
+                      </div>
+                      <div>
+                        <span className="font-bold">Landmark :</span>
+                        {val.landmark}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">City :</span>
+                        {val.city}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Pin-code :</span>
+                        {val.pincode}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Email :</span>
+                        {val.email}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Mobile :</span>
+                        {val.mobilenumber}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">
+                          Blood Compone Available :
+                        </span>
+                        {val.componentsavailable}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">License :</span>
+                        {val.license}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">License Obtain Date :</span>
+                        {val.licenseissuedate}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Open-time :</span>
+                        {val.opentime}
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <div className="text-2xl tracking-wider mt-8">No Item to Display</div>
+        )}
       </div>
     </div>
   );

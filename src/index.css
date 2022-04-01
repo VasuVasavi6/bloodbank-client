@@ -87,4 +87,7 @@
   .bank-item > div:nth-child(1) {
     border-right: 2px solid #e8d5db;
   }
+  .events-bordertop{
+    border-top: 3px solid #e8d5db
+  }
 }

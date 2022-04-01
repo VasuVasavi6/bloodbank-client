@@ -15,11 +15,13 @@ function LoggedInNav({ setLoggedIn }) {
             +91-123456789
           </div>
           <Link to="/profile">
-            <div className="navheader-btn cursor-pointer">Profile</div>
+            <div className="navheader-btn cursor-pointer text-sm">Profile</div>
           </Link>
-          <div className="navheader-btn cursor-pointer">Emergengy Corner</div>
+          <div className="navheader-btn cursor-pointer text-sm">
+            Emergengy Corner
+          </div>
           <div
-            className="navheader-btn cursor-pointer"
+            className="navheader-btn cursor-pointer  text-sm"
             onClick={() => {
               localStorage.removeItem("bloodid");
               localStorage.removeItem("bloodtoken");

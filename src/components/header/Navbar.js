@@ -21,7 +21,7 @@ function Navbar() {
           <Link to="/videos">
             <li className="nav-list-item-style">Videos</li>
           </Link>
-          <Link to="/contact">
+          <Link to="/contact-us">
             <li className="px-8 font-medium  cursor-pointer">Contact</li>
           </Link>
         </ul>
