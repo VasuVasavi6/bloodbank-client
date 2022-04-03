@@ -5,7 +5,10 @@ import { Toast, validateEmail } from "./helper/HelperFunctions";
 import GoogleMapReact from "google-map-react";
 
 const AnyReactComponent = ({ text }) => (
-  <div className="font-bold text-lg text-orange-500">{text}</div>
+  <div className="font-bold text-lg text-orange-500">
+    <span className="pin1"> {text}</span>
+    {/* {text} */}
+  </div>
 );
 
 function Donor({
@@ -91,113 +94,111 @@ function Donor({
     width: "100%",
     height: "100%",
   };
-  if (loggedIn)
-    return (
-      <div className="bg-white w-full">
-        <div className="w-2/3 mx-auto">
-          <div className="pt-8 text-2xl font-bold tracking-widest">Donors</div>
-          <div className="mt-2 text-md font-semibold text-gray-600">
-            Total number of Donors : {switchData.length}
-          </div>
+  // if (loggedIn)
+  return (
+    <div className="bg-white w-full">
+      <div className="w-2/3 mx-auto">
+        <div className="pt-8 text-2xl font-bold tracking-widest">Donors</div>
+        <div className="mt-2 text-md font-semibold text-gray-600">
+          Total number of Donors : {switchData.length}
+        </div>
 
-          {switchData.length > 0 ? (
-            switchData.map((val, index) => {
-              return (
-                <div className="py-3 px-2 my-4 all-bloodbanks" key={index}>
-                  <div className="bank-item flex">
-                    <div className="font-bold text-4xl w-1/2 flex justify-center items-center logo-color">
-                      BLOOD SPOT
+        {switchData.length > 0 ? (
+          switchData.map((val, index) => {
+            return (
+              <div className="py-3 px-2 my-4 all-bloodbanks" key={index}>
+                <div className="bank-item flex">
+                  <div className="font-bold text-4xl w-1/2 flex justify-center items-center logo-color">
+                    BLOOD SPOT
+                  </div>
+                  <div className="px-8 w-full">
+                    <div className="text-4xl font-semibold w-1/2">
+                      {val.fullname}
                     </div>
-                    <div className="px-8 w-full">
-                      <div className="text-4xl font-semibold w-1/2">
-                        {val.fullname}
+                    <div>
+                      <div>
+                        <span className="font-bold">Email: </span>
+                        {val.email}
                       </div>
                       <div>
-                        <div>
-                          <span className="font-bold">Email: </span>
-                          {val.email}
-                        </div>
-                        <div>
-                          <span className="font-bold">Date of Birth: </span>
-                          {val.dob}
-                        </div>
-                        <div>
-                          {" "}
-                          <span className="font-bold">Gender: </span>
-                          {val.gender}
-                        </div>
-                        <div>
-                          {" "}
-                          <span className="font-bold">Blood Group: </span>
-                          {val.bloodgroup}
-                        </div>
-                        <div>
-                          {" "}
-                          <span className="font-bold">Disease: </span>
-                          {val.profileobj.disease}
-                        </div>
-                        <div>
-                          {" "}
-                          <span className="font-bold">Mobile Number: </span>
-                          {val.profileobj.mobilenumber}
-                        </div>
-                        <div>
-                          {" "}
-                          <span className="font-bold">Address: </span>
-                          {val.profileobj.city}, {val.profileobj.district},{" "}
-                          {val.profileobj.state}
-                        </div>
-
-                        {loggedIn && adminLoggedIn === "true" && (
-                          <div
-                            className="navheader-btn cursor-pointer mt-4 w-fit"
-                            onClick={() => {
-                              deleteItem(val._id);
-                            }}
-                          >
-                            Delete
-                          </div>
-                        )}
+                        <span className="font-bold">Date of Birth: </span>
+                        {val.dob}
                       </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Gender: </span>
+                        {val.gender}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Blood Group: </span>
+                        {val.bloodgroup}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Disease: </span>
+                        {val.profileobj.disease}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Mobile Number: </span>
+                        {val.profileobj.mobilenumber}
+                      </div>
+                      <div>
+                        {" "}
+                        <span className="font-bold">Address: </span>
+                        {val.profileobj.city}, {val.profileobj.district},{" "}
+                        {val.profileobj.state}
+                      </div>
+
+                      {loggedIn && adminLoggedIn === "true" && (
+                        <div
+                          className="navheader-btn cursor-pointer mt-4 w-fit"
+                          onClick={() => {
+                            deleteItem(val._id);
+                          }}
+                        >
+                          Delete
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
+              </div>
+            );
+          })
+        ) : (
+          <div className="text-2xl tracking-wider mt-8">No Item to Display</div>
+        )}
+        <div className="h-screen w-full mt-16">
+          <GoogleMapReact
+            bootstrapURLKeys={{
+              key: "AIzaSyDZIpOewtiUkfBBfsDMPeJ8zZzxYJE1oQE",
+            }}
+            defaultCenter={defaultProps.center}
+            defaultZoom={defaultProps.zoom}
+          >
+            {switchData.map((val, index) => {
+              return (
+                <AnyReactComponent
+                  lat={val.profileobj.lat}
+                  lng={val.profileobj.long}
+                  text={val.fullname}
+                />
               );
-            })
-          ) : (
-            <div className="text-2xl tracking-wider mt-8">
-              No Item to Display
-            </div>
-          )}
-          <div className="h-screen w-full mt-16">
-            <GoogleMapReact
-              bootstrapURLKeys={{
-                key: "AIzaSyDZIpOewtiUkfBBfsDMPeJ8zZzxYJE1oQE",
-              }}
-              defaultCenter={defaultProps.center}
-              defaultZoom={defaultProps.zoom}
-            >
-              {switchData.map((val, index) => {
-                return (
-                  <AnyReactComponent
-                    lat={val.profileobj.lat}
-                    lng={val.profileobj.long}
-                    text={val.fullname}
-                  />
-                );
-              })}
-            </GoogleMapReact>
-          </div>
+            })}
+          </GoogleMapReact>
         </div>
-      </div>
-    );
-  return (
-    <div className="bg-white w-full">
-      <div className="w-2/3 mx-auto pt-8">
-        <div className="text-4xl font-bold ">You Need to login first</div>
       </div>
     </div>
   );
+  // return (
+  //   <div className="bg-white w-full">
+  //     <div className="w-2/3 mx-auto pt-8">
+  //       <div className="text-4xl font-bold ">You Need to login first</div>
+  //     </div>
+  //   </div>
+  // );
 }
 
 export default Donor;

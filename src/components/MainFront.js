@@ -170,12 +170,12 @@ function MainFront({
     <>
       <div className="text-white font-semibold px-8 w-full border-b-2 border-white mb-2">
         <div className="flex flex-col w-1/2 px-8 py-20">
-          <div className="flex space-x-4">
+          {/* <div className="flex space-x-4">
             <div className="text-2xl">Blood Bank</div>
             <Switch {...label} onChange={handleInputChange} color="warning" />
 
             <div className="text-2xl">Plasma Bank</div>
-          </div>
+          </div> */}
           <div className="flex items-center space-x-12 mt-12">
             <div className="flex flex-col w-1/2 space-y-8 ">
               <select
@@ -185,7 +185,7 @@ function MainFront({
                 onChange={handleInputChangeSwitch}
                 value={inputValues.state}
               >
-                <option value="">State is fixed for now</option>
+                <option value="">City</option>
                 <option value="Andhra Pradesh">Andhra Pradesh</option>
               </select>
               <select
@@ -195,7 +195,7 @@ function MainFront({
                 onChange={handleInputChangeSwitch}
                 value={inputValues.city}
               >
-                <option value="">Select City</option>
+                <option value="">Select Area</option>
                 {cities.map((val, index) => {
                   return (
                     <option value={val} key={index}>
@@ -224,7 +224,7 @@ function MainFront({
                 <option value="O-">O-</option>
               </select>
             </div>
-            <Link
+            {/* <Link
               to={bankPlasmaSwitch === "bank" ? "/bloodbank" : "/plasmabank"}
             >
               <div
@@ -233,7 +233,7 @@ function MainFront({
               >
                 Find
               </div>
-            </Link>
+            </Link> */}
           </div>
           <div className="mt-20 flex">
             <Link to="/donor">

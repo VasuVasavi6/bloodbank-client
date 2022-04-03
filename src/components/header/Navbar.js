@@ -9,7 +9,7 @@ function Navbar({ setSearchFilterValue }) {
           <Link to="/">
             <li className="nav-list-item-style">Home</li>
           </Link>
-          <Link to="/bloodbank">
+          {/* <Link to="/bloodbank">
             <li
               className="nav-list-item-style"
               onClick={() => {
@@ -18,8 +18,8 @@ function Navbar({ setSearchFilterValue }) {
             >
               Blood Bank
             </li>
-          </Link>
-          <Link to="/plasmabank">
+          </Link> */}
+          {/* <Link to="/plasmabank">
             <li
               className="nav-list-item-style"
               onClick={() => {
@@ -28,7 +28,7 @@ function Navbar({ setSearchFilterValue }) {
             >
               Plasma Bank
             </li>
-          </Link>
+          </Link> */}
           <Link to="/event">
             <li
               className="nav-list-item-style"

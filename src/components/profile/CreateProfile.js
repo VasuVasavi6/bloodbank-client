@@ -295,13 +295,18 @@ function CreateProfile({ loggedIn, profileData }) {
             </div>
           </div>
 
-          <div className="font-semibold my-4">{currentLocation}</div>
-          <div
+          <div className="font-semibold my-4">
+            <span className="font-bolder tracking-wider text-black">
+              Current Location:{" "}
+            </span>
+            {currentLocation}
+          </div>
+          {/* <div
             className="app-color px-5 py-3 text-white text-center font-bold tracking-widest my-8 cursor-pointer"
             // onClick={getCurrentLocation}
           >
             Get Current Location
-          </div>
+          </div> */}
           <div
             className="app-color px-5 py-3 text-white text-center font-bold tracking-widest my-8 cursor-pointer"
             onClick={handleSubmit}
