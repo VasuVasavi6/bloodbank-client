@@ -9,6 +9,9 @@ import "react-slideshow-image/dist/styles.css";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Link } from "react-router-dom";
+
+import { MdPersonOutline } from "react-icons/md";
+
 const responsive = {
   superLargeDesktop: {
     // the naming can be any, depends on you.
@@ -107,24 +110,24 @@ const cities = [
   "Vinchipeta",
 ];
 
-const donors = [
-  {
-    fullname: "shivangi",
-    bloodgroup: "B+",
-  },
-  {
-    fullname: "Rogit",
-    bloodgroup: "B+",
-  },
-  {
-    fullname: "shivangi",
-    bloodgroup: "B+",
-  },
-  {
-    fullname: "shivangi",
-    bloodgroup: "B+",
-  },
-];
+// const donors = [
+//   {
+//     fullname: "shivangi",
+//     bloodgroup: "B+",
+//   },
+//   {
+//     fullname: "Rogit",
+//     bloodgroup: "B+",
+//   },
+//   {
+//     fullname: "shivangi",
+//     bloodgroup: "B+",
+//   },
+//   {
+//     fullname: "shivangi",
+//     bloodgroup: "B+",
+//   },
+// ];
 
 function MainFront({
   setSwitchData,
@@ -132,6 +135,7 @@ function MainFront({
   setSearchCityFilter,
 }) {
   const [bankPlasmaSwitch, setBankPlasmaSwitch] = useState("bank");
+  const [donors, setDonors] = useState([]);
   const [inputValues, setInputValues] = useState({
     city: "",
     state: "",
@@ -141,6 +145,13 @@ function MainFront({
   useEffect(() => {
     setSearchFilterValue("");
     setSearchCityFilter("");
+
+    axios({
+      method: "get",
+      url: `${REQUEST_URL}/auth/getusers`,
+    }).then((response) => {
+      setDonors(response.data.result);
+    });
   }, []);
   const handleInputChange = (e) => {
     if (e.target.checked) setBankPlasmaSwitch("plasma");
@@ -279,7 +290,9 @@ function MainFront({
                         className="flex flex-col justify-center items-center"
                         key={index}
                       >
-                        <div>icon here</div>
+                        <div>
+                          <MdPersonOutline className="text-6xl" />
+                        </div>
                         <div>{val.fullname}</div>
                         <div>{val.bloodgroup}</div>
                       </div>
@@ -300,6 +313,7 @@ function MainFront({
             <div className="flex justify-center items-center mt-12 py-20 space-x-8">
               <div className="flex flex-col justify-center items-center">
                 <div>Icon here</div>
+
                 <div className="font-bold text-xl">Find Blood</div>
                 <div className="capitalize text-center text-gray-600 font-semibold">
                   find blood donors near your location and request the needed
