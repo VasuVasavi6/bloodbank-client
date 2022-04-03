@@ -51,7 +51,11 @@ function Donor({
           temp = users[i];
           temp["profileobj"] = profiles[j];
 
-          if (dummyData.indexOf(temp) === -1) dummyData.push(temp);
+          if (
+            dummyData.indexOf(temp) === -1 &&
+            temp.email !== "lifesaver0606@gmail.com"
+          )
+            dummyData.push(temp);
         }
       }
     }
@@ -137,19 +141,21 @@ function Donor({
                       <div>
                         {" "}
                         <span className="font-bold">Disease: </span>
-                        {val.profileobj.disease}
+                        {val.profileobj && val.profileobj.disease}
                       </div>
                       <div>
                         {" "}
                         <span className="font-bold">Mobile Number: </span>
-                        {val.profileobj.mobilenumber}
+                        {val.profileobj && val.profileobj.mobilenumber}
                       </div>
-                      <div>
-                        {" "}
-                        <span className="font-bold">Address: </span>
-                        {val.profileobj.city}, {val.profileobj.district},{" "}
-                        {val.profileobj.state}
-                      </div>
+                      {val.profileobj && (
+                        <div>
+                          {" "}
+                          <span className="font-bold">Address: </span>
+                          {val.profileobj.city}, {val.profileobj.district},{" "}
+                          {val.profileobj.state}
+                        </div>
+                      )}
 
                       {loggedIn && adminLoggedIn === "true" && (
                         <div
@@ -170,25 +176,27 @@ function Donor({
         ) : (
           <div className="text-2xl tracking-wider mt-8">No Item to Display</div>
         )}
-        <div className="h-screen w-full mt-16">
-          <GoogleMapReact
-            bootstrapURLKeys={{
-              key: "AIzaSyDZIpOewtiUkfBBfsDMPeJ8zZzxYJE1oQE",
-            }}
-            defaultCenter={defaultProps.center}
-            defaultZoom={defaultProps.zoom}
-          >
-            {switchData.map((val, index) => {
-              return (
-                <AnyReactComponent
-                  lat={val.profileobj.lat}
-                  lng={val.profileobj.long}
-                  text={val.fullname}
-                />
-              );
-            })}
-          </GoogleMapReact>
-        </div>
+        {switchData[0] && switchData[0].profileobj && (
+          <div className="h-screen w-full mt-16">
+            <GoogleMapReact
+              bootstrapURLKeys={{
+                key: "AIzaSyDZIpOewtiUkfBBfsDMPeJ8zZzxYJE1oQE",
+              }}
+              defaultCenter={defaultProps.center}
+              defaultZoom={defaultProps.zoom}
+            >
+              {switchData.map((val, index) => {
+                return (
+                  <AnyReactComponent
+                    lat={val.profileobj.lat}
+                    lng={val.profileobj.long}
+                    text={val.fullname}
+                  />
+                );
+              })}
+            </GoogleMapReact>
+          </div>
+        )}
       </div>
     </div>
   );
