@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Switch from "@mui/material/Switch";
 import { Toast } from "./helper/HelperFunctions";
 import axios from "axios";
@@ -126,12 +126,22 @@ const donors = [
   },
 ];
 
-function MainFront({ setSwitchData, setSearchFilterValue }) {
+function MainFront({
+  setSwitchData,
+  setSearchFilterValue,
+  setSearchCityFilter,
+}) {
   const [bankPlasmaSwitch, setBankPlasmaSwitch] = useState("bank");
   const [inputValues, setInputValues] = useState({
     city: "",
     state: "",
+    bloodgroup: "",
   });
+
+  useEffect(() => {
+    setSearchFilterValue("");
+    setSearchCityFilter("");
+  }, []);
   const handleInputChange = (e) => {
     if (e.target.checked) setBankPlasmaSwitch("plasma");
     else setBankPlasmaSwitch("bank");
@@ -145,6 +155,14 @@ function MainFront({ setSwitchData, setSearchFilterValue }) {
       Toast("error", "Some Fields are Empty");
     } else {
       setSearchFilterValue(inputValues.city);
+    }
+  };
+  const handleBloodSearch = () => {
+    if (inputValues.bloodgroup === "" && inputValues.city === "") {
+      Toast("error", "Some Fields are Empty");
+    } else {
+      setSearchFilterValue(inputValues.bloodgroup);
+      setSearchCityFilter(inputValues.city);
     }
   };
 
@@ -186,6 +204,25 @@ function MainFront({ setSwitchData, setSearchFilterValue }) {
                   );
                 })}
               </select>
+
+              <select
+                name="bloodgroup"
+                id="bloodgroup"
+                className="h-10 rounded-lg text-black px-4 py-2"
+                onChange={handleInputChangeSwitch}
+                value={inputValues.bloodgroup}
+              >
+                <option value="">Select BloodGroup</option>
+                <option value="Dont't know">Don't know</option>
+                <option value="A+">A+</option>
+                <option value="B+">B+</option>
+                <option value="A-">A-</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
             </div>
             <Link
               to={bankPlasmaSwitch === "bank" ? "/bloodbank" : "/plasmabank"}
@@ -199,9 +236,14 @@ function MainFront({ setSwitchData, setSearchFilterValue }) {
             </Link>
           </div>
           <div className="mt-20 flex">
-            <div className="bg-white ml-36 logo-color py-2 px-4 rounded-lg cursor-pointer">
-              Donate
-            </div>
+            <Link to="/donor">
+              <div
+                className="bg-white logo-color py-2 px-4 rounded-lg cursor-pointer"
+                onClick={handleBloodSearch}
+              >
+                Find Donor
+              </div>
+            </Link>
           </div>
         </div>
         {/* Image section */}

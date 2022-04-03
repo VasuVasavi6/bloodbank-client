@@ -17,11 +17,18 @@ import CreateProfile from "./components/profile/CreateProfile";
 import ContactUs from "./components/ContactUs";
 import Videos from "./components/Videos";
 import Event from "./components/Event";
+import Donor from "./components/Donor";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [switchData, setSwitchData] = useState([]);
+
   const [searchFilterValue, setSearchFilterValue] = useState("");
+  const [searchCityFilter, setSearchCityFilter] = useState("");
+
+  const [adminLoggedIn, setAdminLoggedIn] = useState(false);
+  const [profileData, setProfileData] = useState({});
+  const [allprofileData, setAllprofileData] = useState([]);
 
   useEffect(() => {
     axios({
@@ -33,17 +40,25 @@ function App() {
     }).then((response) => {
       if (response.data.auth === true) {
         setLoggedIn(true);
+        setAdminLoggedIn(localStorage.getItem("bloodadmin"));
+        console.log(adminLoggedIn, "admin check");
       } else {
         setLoggedIn(false);
       }
     });
-  }, [loggedIn, switchData]);
+  }, [loggedIn, switchData, adminLoggedIn]);
   return (
     <div className="app-color">
-      {loggedIn && <LoggedInNav setLoggedIn={setLoggedIn} />}
+      {loggedIn && (
+        <LoggedInNav
+          setLoggedIn={setLoggedIn}
+          setSearchFilterValue={setSearchFilterValue}
+          setSearchCityFilter={setSearchCityFilter}
+        />
+      )}
       {!loggedIn && <Navheader />}
 
-      <Navbar />
+      <Navbar setSearchFilterValue={setSearchFilterValue} />
       <Routes>
         <Route
           path="/"
@@ -52,11 +67,20 @@ function App() {
             <MainFront
               setSwitchData={setSwitchData}
               setSearchFilterValue={setSearchFilterValue}
+              setSearchCityFilter={setSearchCityFilter}
             />
           }
         />
         <Route path="/register" element={<Register />} />
-        <Route path="/signin" element={<SignIn setLoggedIn={setLoggedIn} />} />
+        <Route
+          path="/signin"
+          element={
+            <SignIn
+              setLoggedIn={setLoggedIn}
+              setAdminLoggedIn={setAdminLoggedIn}
+            />
+          }
+        />
         <Route
           path="/bloodbank"
           element={
@@ -65,6 +89,7 @@ function App() {
               setSwitchData={setSwitchData}
               loggedIn={loggedIn}
               searchFilterValue={searchFilterValue}
+              adminLoggedIn={adminLoggedIn}
             />
           }
         />
@@ -76,11 +101,41 @@ function App() {
               setSwitchData={setSwitchData}
               loggedIn={loggedIn}
               searchFilterValue={searchFilterValue}
+              adminLoggedIn={adminLoggedIn}
             />
           }
         />
-        <Route path="/profile" element={<ProfileHeader />} />
-        <Route path="/create-profile" element={<CreateProfile />} />
+        <Route
+          path="/donor"
+          element={
+            <Donor
+              switchData={switchData}
+              setSwitchData={setSwitchData}
+              loggedIn={loggedIn}
+              searchFilterValue={searchFilterValue}
+              searchCityFilter={searchCityFilter}
+              adminLoggedIn={adminLoggedIn}
+              allprofileData={allprofileData}
+              setAllprofileData={setAllprofileData}
+            />
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProfileHeader
+              loggedIn={loggedIn}
+              setProfileData={setProfileData}
+              setSwitchData={setSwitchData}
+            />
+          }
+        />
+        <Route
+          path="/create-profile"
+          element={
+            <CreateProfile loggedIn={loggedIn} profileData={profileData} />
+          }
+        />
         <Route path="/contact-us" element={<ContactUs />} />
         <Route path="/videos" element={<Videos />} />
         <Route
@@ -90,6 +145,7 @@ function App() {
               switchData={switchData}
               setSwitchData={setSwitchData}
               loggedIn={loggedIn}
+              adminLoggedIn={adminLoggedIn}
             />
           }
         />

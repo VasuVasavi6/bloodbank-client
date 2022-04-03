@@ -3,25 +3,37 @@ import { Link } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import { Toast } from "../helper/HelperFunctions";
 
-function LoggedInNav({ setLoggedIn }) {
+function LoggedInNav({
+  setLoggedIn,
+  setSearchFilterValue,
+  setSearchCityFilter,
+}) {
   return (
-    <div className="w-full h-28">
+    <div className="w-full h-24 xl:h-28">
       <div className="w-4/5 m-auto bg-white flex justify-between items-center py-5 rounded-lg shadow-2xl">
-        <div className="font-bold display-3 text-5xl logo-color ml-4">
+        <div className="font-bold text-2xl xl:text-5xl logo-color ml-4">
           BLOOD SPOT
         </div>
-        <div className="flex justify-between items-center space-x-8 mr-6">
-          <div className="logo-color text-3xl contact-border">
+        <div className="flex justify-between items-center space-x-4 mr-3 lg:space-x-8 lg:mr-6">
+          <div className="logo-color xl:text-3xl text-sm contact-border">
             +91-123456789
           </div>
           <Link to="/profile">
             <div className="navheader-btn cursor-pointer text-sm">Profile</div>
           </Link>
-          <div className="navheader-btn cursor-pointer text-sm">
-            Emergengy Corner
-          </div>
+          <Link to="/donor">
+            <div
+              className="navheader-btn cursor-pointer text-xs"
+              onClick={() => {
+                setSearchFilterValue("");
+                setSearchCityFilter("");
+              }}
+            >
+              Emergengy Corner
+            </div>
+          </Link>
           <div
-            className="navheader-btn cursor-pointer  text-sm"
+            className="navheader-btn cursor-pointer text-xs"
             onClick={() => {
               localStorage.removeItem("bloodid");
               localStorage.removeItem("bloodtoken");

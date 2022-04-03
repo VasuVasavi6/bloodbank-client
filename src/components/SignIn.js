@@ -4,7 +4,7 @@ import { ToastContainer } from "react-toastify";
 import { REQUEST_URL } from "../CONSTANTS";
 import { Toast, validateEmail } from "./helper/HelperFunctions";
 
-function SignIn({ setLoggedIn }) {
+function SignIn({ setLoggedIn, setAdminLoggedIn }) {
   const [inputValues, setInputValues] = useState({
     name: "",
     password: "",
@@ -40,13 +40,15 @@ function SignIn({ setLoggedIn }) {
       }).then((response) => {
         if (response.data.status === "not ok") {
           Toast("error", response.data.message);
-        } else {
+        } else if (response.data.status === "ok") {
           Toast("success", response.data.message);
           if (response.data.auth === true) {
             localStorage.setItem("bloodtoken", response.data.token);
             localStorage.setItem("bloodid", response.data.result._id);
+            localStorage.setItem("bloodadmin", response.data.adminCheck);
           }
           setLoggedIn(true);
+          setAdminLoggedIn(response.data.adminCheck);
           setTimeout(() => {
             window.location.href = "/";
           }, 2000);

@@ -31,9 +31,10 @@ const bloodbankitems = [
     opentime: "dummy",
   },
 ];
-function Event({ switchData, setSwitchData, loggedIn }) {
+function Event({ switchData, setSwitchData, loggedIn, adminLoggedIn }) {
   const [addBankCheck, setAddBankCheck] = useState(false);
   const [addBankBtn, setAddBankBtn] = useState(false);
+  const [deleteCheck, setDeleteCheck] = useState(false);
 
   const [interestedBtn, setInterestedBtn] = useState(false);
 
@@ -53,7 +54,8 @@ function Event({ switchData, setSwitchData, loggedIn }) {
     }).then((response) => {
       setSwitchData(response.data.result);
     });
-  }, [addBankBtn, interestedBtn]);
+    console.log(adminLoggedIn, "admin check1111");
+  }, [addBankBtn, interestedBtn, deleteCheck]);
 
   const handleSubmit = (e) => {
     if (
@@ -130,6 +132,18 @@ function Event({ switchData, setSwitchData, loggedIn }) {
       });
     }
   };
+  const deleteItem = (id) => {
+    axios({
+      method: "post",
+      url: `${REQUEST_URL}/userroutesevent/delete`,
+      data: {
+        id: id,
+      },
+    }).then((response) => {
+      Toast("success", response.data.message);
+      setDeleteCheck(!deleteCheck);
+    });
+  };
   return (
     <div className="bg-white w-full">
       <div className="w-2/3 mx-auto">
@@ -144,7 +158,7 @@ function Event({ switchData, setSwitchData, loggedIn }) {
         <div className="mt-2 text-md font-semibold text-gray-600">
           Total number of events : {switchData.length}
         </div>
-        {loggedIn && (
+        {loggedIn && adminLoggedIn === "true" && (
           <div className="flex justify-between items-center px-5 mt-8 add-bloodbank py-3 ">
             <div className="text-lg text-gray-600">Add new Event</div>
             <div
@@ -276,6 +290,16 @@ function Event({ switchData, setSwitchData, loggedIn }) {
                       >
                         Not Interested
                       </div>
+                      {loggedIn && adminLoggedIn === "true" && (
+                        <div
+                          className="navheader-btn cursor-pointer w-fit"
+                          onClick={() => {
+                            deleteItem(val._id);
+                          }}
+                        >
+                          Delete
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
