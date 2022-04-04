@@ -137,7 +137,10 @@ function App() {
           }
         />
         <Route path="/contact-us" element={<ContactUs />} />
-        <Route path="/videos" element={<Videos />} />
+        <Route
+          path="/videos"
+          element={<Videos loggedIn={loggedIn} adminLoggedIn={adminLoggedIn} />}
+        />
         <Route
           path="/event"
           element={
