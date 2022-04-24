@@ -14,9 +14,42 @@ const initialValues = {
   district: "",
   city: "",
 };
+function is_of_age(dob, age) {
+  // dates are all converted to date objects
+  var my_dob = new Date(dob);
+  var today = new Date();
+
+  var max_dob = new Date(
+    today.getFullYear() - age,
+    today.getMonth(),
+    today.getDate()
+  );
+  return max_dob.getTime() > my_dob.getTime();
+}
+function getAge(DOB) {
+  var today = new Date();
+  var birthDate = new Date(DOB);
+  var age = today.getFullYear() - birthDate.getFullYear();
+  var m = today.getMonth() - birthDate.getMonth();
+  if (m < 0) m = m * -1;
+  else if (m === 0) m = 1;
+
+  console.log(age, m, "6 months");
+  return age * m;
+}
+function diff_months_count(startDate, endDate) {
+  var months;
+  var d1 = new Date(startDate);
+  var d2 = new Date(endDate);
+  months = (d2.getFullYear() - d1.getFullYear()) * 12;
+  months -= d1.getMonth();
+  months += d2.getMonth();
+  return months <= 0 ? 0 : months;
+}
 
 function CreateProfile({ loggedIn, profileData }) {
   const [inputValues, setInputValues] = useState(initialValues);
+  const [availabilityCheck, setAvailabilityCheck] = useState("yes");
   const [coords, setCoords] = useState({
     lat: "",
     long: "",
@@ -31,8 +64,17 @@ function CreateProfile({ loggedIn, profileData }) {
     if (profileData) {
       setInputValues(profileData);
     }
-    // getCurrentLocation();
-    (function getCurrentLocation() {
+    axios({
+      method: "POST",
+      url: `${REQUEST_URL}/auth/getuserdob`,
+      data: {
+        userid: localStorage.getItem("bloodid"),
+      },
+    }).then((response) => {
+      const check = is_of_age(response.data.result, 18);
+      check ? setAvailabilityCheck("yes") : setAvailabilityCheck("no");
+    });
+    function getCurrentLocation() {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(function (position) {
           console.log("Latitude is :", position.coords.latitude);
@@ -65,7 +107,8 @@ function CreateProfile({ loggedIn, profileData }) {
       } else {
         console.log("Not Available");
       }
-    })();
+    }
+    getCurrentLocation();
   }, [profileData]);
   const handleSubmit = (e) => {
     if (
@@ -81,6 +124,12 @@ function CreateProfile({ loggedIn, profileData }) {
     ) {
       Toast("error", "Some Fields are Empty");
     } else {
+      let output = "";
+      let months = diff_months_count(inputValues.lastdonationdate, new Date());
+      months >= 6 && availabilityCheck && inputValues.availability === "yes"
+        ? (output = "yes")
+        : (output = "no");
+      console.log(output, months, availabilityCheck, "output");
       if (!profileData._id) {
         axios({
           method: "post",
@@ -92,7 +141,7 @@ function CreateProfile({ loggedIn, profileData }) {
             lastdonationdate: inputValues.lastdonationdate,
             mobilenumber: inputValues.mobilenumber,
             disease: inputValues.disease,
-            availability: inputValues.availability,
+            availability: output,
             state: inputValues.state,
             district: inputValues.district,
             city: inputValues.city,
@@ -125,7 +174,7 @@ function CreateProfile({ loggedIn, profileData }) {
             lastdonationdate: inputValues.lastdonationdate,
             mobilenumber: inputValues.mobilenumber,
             disease: inputValues.disease,
-            availability: inputValues.availability,
+            availability: output,
             state: inputValues.state,
             district: inputValues.district,
             city: inputValues.city,

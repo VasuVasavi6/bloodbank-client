@@ -367,7 +367,7 @@ function BloodBank({
               <div className="py-3 px-2 my-4 all-bloodbanks" key={index}>
                 <div className="bank-item flex">
                   <div className="font-bold text-4xl w-1/2 flex justify-center items-center logo-color">
-                    BLOOD SPOT
+                    DONOR SPOT
                   </div>
                   <div className="px-8 w-full">
                     <div className="text-4xl font-semibold w-1/2">

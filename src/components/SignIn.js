@@ -60,7 +60,7 @@ function SignIn({ setLoggedIn, setAdminLoggedIn }) {
     <div className=" bg-white sign-in-page-length pt-16">
       <div className="h-96 app-color w-2/3 mx-auto flex rounded-3xl sign-in-page-border">
         <div className="w-1/2 text-white font-bold text-4xl flex justify-center items-center">
-          Blood Spot
+          DONOR Spot
         </div>
         <div className="w-1/2 bg-white">
           <div className="text-2xl text-center mt-5 logo-color font-bold">

@@ -278,7 +278,7 @@ function MainFront({
         <div className="bg-white w-full">
           <div className="py-10 ">
             <div className="text-3xl font-bold text-center my-5 mt-20">
-              Donors Register With Blood Spot
+              Donors Register With DONOR Spot
             </div>
 
             <div className="w-2/3 bg-white h-72 mx-auto donors-front rounded-2xl">
