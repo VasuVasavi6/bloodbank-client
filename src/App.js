@@ -18,6 +18,7 @@ import ContactUs from "./components/ContactUs";
 import Videos from "./components/Videos";
 import Event from "./components/Event";
 import Donor from "./components/Donor";
+import ForgetPassword from "./components/profile/ForgetPassword";
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -60,6 +61,10 @@ function App() {
 
       <Navbar setSearchFilterValue={setSearchFilterValue} />
       <Routes>
+        <Route
+          path="/changepassword"
+          element={<ForgetPassword loggedIn={loggedIn} />}
+        ></Route>
         <Route
           path="/"
           exact

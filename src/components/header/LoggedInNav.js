@@ -11,15 +11,20 @@ function LoggedInNav({
   return (
     <div className="w-full h-24 xl:h-28">
       <div className="w-4/5 m-auto bg-white flex justify-between items-center py-5 rounded-lg shadow-2xl">
-        <div className="font-bold text-2xl xl:text-5xl logo-color ml-4">
+        <div className="font-bold text-2xl xl:text-3xl logo-color ml-4">
           DONOR SPOT
         </div>
         <div className="flex justify-between items-center space-x-4 mr-3 lg:space-x-8 lg:mr-6">
-          <div className="logo-color xl:text-3xl text-sm contact-border">
+          <div className="logo-color xl:text-xl text-sm contact-border">
             +91-123456789
           </div>
           <Link to="/profile">
             <div className="navheader-btn cursor-pointer text-sm">Profile</div>
+          </Link>
+          <Link to="/changepassword">
+            <div className="navheader-btn cursor-pointer text-xs">
+              Change Password
+            </div>
           </Link>
           <Link to="/donor">
             <div
